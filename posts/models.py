@@ -36,7 +36,7 @@ class Post(models.Model):
     
     # A group where post is posted. A post does not need to belong to a group
     group = models.ForeignKey(
-        Group, on_delete=models.CASCADE, related_name="post_group", 
+        Group, on_delete=models.SET_NULL, related_name="post_group", 
         blank=True, null=True)
     
     def __str__(self):
