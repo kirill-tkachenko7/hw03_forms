@@ -25,7 +25,12 @@ SECRET_KEY = '9#u83t_wux)&$lh6o_!px^ff)euo(se9%h%=k*u7#$wye$x=ok'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        "localhost",
+        "127.0.0.1",
+        "[::1]",
+        "testserver",
+]
 
 
 # Application definition
@@ -121,8 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index" 
