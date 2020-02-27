@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.flatpages import views
 
 urlpatterns = [
     # site home page views are in posts app
     path('', include('posts.urls')),
+
+    # flatpages
+    path("about/", include("django.contrib.flatpages.urls")),
 
     # user registration and authentication is in users app
     path('auth/', include('users.urls')),
@@ -28,4 +32,9 @@ urlpatterns = [
 
     # admin site
     path('admin/', admin.site.urls),
+]
+
+urlpatterns += [
+        path('about-author/', views.flatpage, {'url': '/about-author/'}, name='author'),
+        path('about-spec/', views.flatpage, {'url': '/about-spec/'}, name='spec'),
 ]
