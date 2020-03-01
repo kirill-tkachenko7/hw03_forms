@@ -18,8 +18,6 @@ from django.urls import path, include
 from django.contrib.flatpages import views
 
 urlpatterns = [
-    # site home page views are in posts app
-    path('', include('posts.urls')),
 
     # flatpages
     path("about/", include("django.contrib.flatpages.urls")),
@@ -32,6 +30,9 @@ urlpatterns = [
 
     # admin site
     path('admin/', admin.site.urls),
+    
+    # site home page views are in posts app
+    path('', include('posts.urls')),
 ]
 
 urlpatterns += [
