@@ -74,14 +74,11 @@ def profile(request, username):
 
 def post_view(request, username, post_id):
     """ view a post """
-    try:
-        # cache the author so that template doesn't 
-        # query the database for each {{ post.author }} tag
-        post_object = Post.objects.select_related('author').get(
-            id=post_id, author__username=username)
-    except ObjectDoesNotExist:
-        # if username is not the author of psot_id, or post/author don't exist, return 404.
-        return Http404
+    # cache the author so that template doesn't 
+    # query the database for each {{ post.author }} tag.
+    # if post or author not found, or author's username is wrong, return 404.
+    post_object = get_object_or_404(Post.objects.select_related('author'), 
+        id=post_id, author__username=username)
     
     # count author's posts:
     post_count = Post.objects.filter(author=post_object.author).all().count()
@@ -95,17 +92,26 @@ def post_view(request, username, post_id):
 
 @login_required
 def post_edit(request, username, post_id):
+    # only post author can edit post
+    if request.user.username != username:
+        raise PermissionDenied("Редактировать публикацию может только ее автор")
+
+    # get post to be edited
     # return 404 if User with username does not exist, if Post with 
     # post_id does not exist or if username is not the author of the Post.
     post_object = get_object_or_404(Post, id=post_id, author__username=username)
 
-    # only post author can edit post
-    if request.user.username != username:
-        raise PermissionDenied("Редактировать публикацию может только ее автор")
-    
-    # TODO the rest of the function
-    # тут тело функции. Не забудьте проверить, 
-    # что текущий пользователь — это автор записи.
-    # В качестве шаблона страницы редактирования укажите шаблон создания новой записи
-    # который вы создали раньше (вы могли назвать шаблон иначе)
-    return render(request, "new_post.html", {})
+    if request.method == 'POST':
+        # if we got a POST request, validate form
+        form = PostForm(request.POST, instance=post_object)
+        if form.is_valid():
+            # if form is valid, save changes
+            form.save()
+            # redirect to post_view
+            return redirect('post', username=username, post_id=post_id)
+        # if form is not valid, display the same form and show validation errors
+        return render(request, 'new_post.html', {'form': form})
+
+    # if this is not a POST request, pre-populate form with post object's data.
+    form = PostForm(instance=post_object)
+    return render(request, 'new_post.html', {'form': form})

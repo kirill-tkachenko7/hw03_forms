@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} {{ profile_user.name }} {% endblock %}
+{% block title %} {{ profile_user.get_full_name }} {% endblock %}
 {% block content %}
 
 <main role="main" class="container">
