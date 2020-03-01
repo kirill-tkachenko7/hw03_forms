@@ -30,12 +30,11 @@ urlpatterns = [
 
     # admin site
     path('admin/', admin.site.urls),
+
+    #flatpages
+    path('about-author/', views.flatpage, {'url': '/about-author/'}, name='author'),
+    path('about-spec/', views.flatpage, {'url': '/about-spec/'}, name='spec'),
     
     # site home page views are in posts app
     path('', include('posts.urls')),
-]
-
-urlpatterns += [
-        path('about-author/', views.flatpage, {'url': '/about-author/'}, name='author'),
-        path('about-spec/', views.flatpage, {'url': '/about-spec/'}, name='spec'),
 ]
