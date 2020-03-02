@@ -8,5 +8,5 @@ class PostForm(forms.ModelForm):
         """ bind form to Post model and add fields 'text' and 'group' """
         model = Post
         fields = ('text', 'group')
-        labels = {'text': 'Текст публикации', 'group':'Сообщество'}
+        labels = {'text': 'Текст записи', 'group':'Сообщество'}
         widgets = {'text': forms.Textarea()}

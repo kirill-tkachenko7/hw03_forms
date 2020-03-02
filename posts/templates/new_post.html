@@ -1,19 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Добавить публикацию{% endblock %}
+{% block title %}
+    {% if mode == "add" %}
+        Добавить запись
+    {% elif mode == "edit" %}
+        Редактировать запись
+    {% endif %}
+{% endblock %}
 {% block content %}
 {% load user_filters %}
 
 <div class="row justify-content-center">
     <div class="col-md-8 p-5">
         <div class="card">
-            <div class="card-header">Добавить публикацию</div>
+            <div class="card-header">
+                {% if mode == "add" %}
+                    Добавить запись
+                {% elif mode == "edit" %}
+                    Редактировать запись
+                {% endif %}
+            </div>
             <div class="card-body">
 
-                    {% for error in form.errors %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
+                {% for error in form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
 
 
                 <form method="post">
@@ -32,7 +44,11 @@
 
                     <div class="col-md-6 offset-md-4">              
                         <button type="submit" class="btn btn-primary">
-                            Сохранить
+                            {% if mode == "add" %}
+                                Добавить
+                            {% elif mode == "edit" %}
+                                Сохранить
+                            {% endif %}
                         </button>
                     </div>
                 </form>
