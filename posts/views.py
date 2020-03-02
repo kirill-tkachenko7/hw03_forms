@@ -1,9 +1,6 @@
-from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from .forms import PostForm
 from .models import Post, Group, User
 
@@ -56,15 +53,15 @@ def new_post(request):
 
 def profile(request, username):
     """ profile information and user's latest posts """
-    profile_user = get_object_or_404(User, username=username)
-    post_list = Post.objects.filter(author__username=username).order_by("-pub_date").all()
+    profile = get_object_or_404(User, username=username)
+    post_list = Post.objects.filter(author=profile).order_by("-pub_date").all()
     
     paginator = Paginator(post_list, 10) # display 10 posts per page
     page_number = request.GET.get('page') 
     page = paginator.get_page(page_number) # retreive posts with correct offset
 
     context_dict =  {
-        'profile_user': profile_user,
+        'profile': profile,
         'post_count': post_list.count(),
         'page': page, 
         'paginator': paginator
@@ -84,7 +81,7 @@ def post_view(request, username, post_id):
     post_count = Post.objects.filter(author=post_object.author).all().count()
 
     context_dict =  {
-        'profile_user': post_object.author,
+        'profile': post_object.author,
         'post_count': post_count,
         'post': post_object
     }

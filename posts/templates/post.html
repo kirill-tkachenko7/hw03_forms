@@ -3,7 +3,7 @@
 {% block content %}
 <main role="main" class="container">
     <div class="row">
-        {% include "base_profile.html" with profile_user=post.author post_count=post_count %}
+        {% include "base_profile.html" with profile=post.author post_count=post_count %}
         <div class="col-md-9">
             <!-- Пост -->  
             <div class="card mb-3 mt-1 shadow-sm">
