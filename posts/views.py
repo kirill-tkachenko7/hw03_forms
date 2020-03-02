@@ -51,7 +51,7 @@ def new_post(request):
         return render(request, 'new_post.html', {'form': form})
     # if this is not a POST request, display a blank PostForm
     form = PostForm()
-    return render(request, 'new_post.html', {'form': form})
+    return render(request, 'new_post.html', {'form': form, 'mode': 'add'})
 
 
 def profile(request, username):
@@ -90,11 +90,12 @@ def post_view(request, username, post_id):
     }
     return render(request, "post.html", context_dict)
 
+
 @login_required
 def post_edit(request, username, post_id):
     # only post author can edit post
     if request.user.username != username:
-        raise PermissionDenied("Редактировать публикацию может только ее автор")
+        return redirect('post', username=username, post_id=post_id)
 
     # get post to be edited
     # return 404 if User with username does not exist, if Post with 
@@ -114,4 +115,4 @@ def post_edit(request, username, post_id):
 
     # if this is not a POST request, pre-populate form with post object's data.
     form = PostForm(instance=post_object)
-    return render(request, 'new_post.html', {'form': form})
+    return render(request, 'new_post.html', {'form': form, 'mode': 'edit'})
